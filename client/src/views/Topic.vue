@@ -6,10 +6,12 @@
 
 <script>
 import Alltopics from '@/views/Alltopics.vue'
+import Detailtopic from '@/views/Detailtopic.vue'
+import Addtopic from '@/views/Addtopic.vue'
 export default {
   name: 'Topic',
   components: {
-    Alltopics
+    Alltopics, Detailtopic, Addtopic
   }
 }
 </script>

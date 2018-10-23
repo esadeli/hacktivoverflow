@@ -4,7 +4,7 @@ import Router from 'vue-router'
 import Topic from './views/Topic.vue'
 import Alltopics from './views/Alltopics.vue'
 import Detailtopic from './views/Detailtopic.vue'
-
+import Addtopic from './views/Addtopic.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -33,6 +33,11 @@ export default new Router({
         path: '/',
         name: 'Alltopics',
         component: Alltopics
+      },
+      {
+        path: '/add',
+        name: 'Addtopic',
+        component: Addtopic
       },
       {
         path: ':id',
