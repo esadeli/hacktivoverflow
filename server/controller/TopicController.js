@@ -158,7 +158,7 @@ class TopicController {
                       .then(topic =>{
                           res.status(201).json({
                               msg: 'Topic has been upvoted',
-                              data: upvotedtopic
+                              data: topic
                           })
                       })
                       .catch(error => {
@@ -178,7 +178,7 @@ class TopicController {
                       .then(topic =>{
                           res.status(201).json({
                               msg: 'Upvotes has been cancelled',
-                              data: upvotedtopic
+                              data: topic
                           })
                       })
                       .catch(error => {
@@ -190,7 +190,7 @@ class TopicController {
                 }
             } else if(topic.author == req.decoded.userid) {
                 res.status(400).json({
-                    msg: 'User can\'t upvotes her/his own article '
+                    msg: 'User can\'t upvote her/his own article '
                 })
             }   
          })
@@ -204,7 +204,90 @@ class TopicController {
 
     // downvotes topic
     static downVotes(req,res){
-        
+        Topic.findOne({
+            _id: req.params.id
+        })
+         .then(topic => {
+            let downvotedtopic = topic
+            // check if it's her/his own article
+            if(topic.author != req.decoded.userid) {
+                // check if the user has already upvote this
+                if(topic.downvotes.indexOf(`${req.decoded.userid}`)=== -1){
+                    Topic.findOneAndUpdate({
+                        _id: req.params.id
+                    },{
+                        $push: {
+                          downvotes: req.decoded.userid  
+                        }
+                    })
+                      .then(topic =>{
+                          res.status(201).json({
+                              msg: 'Topic has been downvoted',
+                              data: topic
+                          })
+                      })
+                      .catch(error => {
+                          res.status(201).json({
+                              msg: 'ERROR Downvotes topic',
+                              err: error
+                          })
+                      })
+                } else if (topic.downvotes.indexOf(`${req.decoded.userid}`) !== -1) {
+                    Topic.findOneAndUpdate({
+                        _id: req.params.id
+                    },{
+                        $pull: {
+                          downvotes: req.decoded.userid  
+                        }
+                    })
+                      .then(topic =>{
+                          res.status(201).json({
+                              msg: 'Downvotes has been cancelled',
+                              data: topic
+                          })
+                      })
+                      .catch(error => {
+                          res.status(201).json({
+                              msg: 'ERROR Cancel Downvotes topic',
+                              err: error
+                          })
+                      })
+                }
+            } else if(topic.author == req.decoded.userid) {
+                res.status(400).json({
+                    msg: 'User can\'t downvote her/his own article '
+                })
+            }   
+         })
+         .catch(error =>{
+             res.status(500).json({
+                msg: 'ERROR Getting Data before Downvotes',
+                err: error 
+             })
+         })
+    }
+
+    // share topic
+    static share(req,res){
+        Topic.findOneAndUpdate({
+            _id: req.params.id
+        },{
+            $push: {
+                shares: req.decoded.userid
+            }
+        })
+          .then(topic =>{
+              res.status(201).json({
+                  msg: 'Topic has been shared',
+                  data: topic
+              })
+          })
+          .catch(error => {
+              res.status(500).json({
+                  msg: 'ERROR Sharing topic',
+                  err: error
+              })
+          })
     }
 }
 
