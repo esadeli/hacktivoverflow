@@ -10,6 +10,11 @@
             <ul class="navbar-nav mr-auto">
             </ul>
             <!--Temporarily change to token instead of jwttoken for testing normal case-->
+            <div id="gSignInWrapper" v-if="token === null || token === '' " data-width="300" data-height="200" data-longtitle="true">
+                        <button id="google-signin-button" class="customGPlusSignIn">
+                            Google Sign In
+                        </button>
+                    </div>
             <div v-if="token === null || token === '' ">
                <button class="btn btn-info my-2 my-sm-0" data-toggle="modal" data-target="#loginModal" type="button">Login</button>
             </div>
@@ -103,7 +108,37 @@ export default {
       jwttoken: ''
     }
   },
+  mounted () {
+    /**
+     * client_id: '742869772361-8bsmdes62f97gruqqiomk0qvjrlsdmdn.apps.googleusercontent.com',
+     * cookiepolicy: 'single_host_origin'
+     */
+    window.gapi.load('auth2', () => {
+      // Retrieve the singleton for the GoogleAuth library and set up the client.
+      const auth2 = window.gapi.auth2.init({
+        client_id: '155964938197-i2mrsj5i99v48tb1pl8m3apik9en4eo4.apps.googleusercontent.com',
+        cookiepolicy: 'single_host_origin'
+        // Request scopes in addition to 'profile' and 'email'
+        // scope: 'additional_scope'
+      })
+      this.attachSignin(auth2, document.getElementById('google-signin-button'))
+    })  
+  },
   methods: {
+    attachSignin (auth2Instance, element) {
+      let self = this
+      auth2Instance.attachClickHandler(element, {},
+        function (googleUser) {
+          const profile = googleUser.getBasicProfile()
+          const id_token = googleUser.getAuthResponse().id_token;
+          console.log('Name: ' + profile.getName())
+          console.log('Email: ' + profile.getEmail()) // This is null if the 'email' scope is not present.
+          // self.logingoogle()
+          //self.logoutgoogle()
+        }, function (error) {
+          alert(JSON.stringify(error, undefined, 2))
+        })
+    },  
     gotohome () {
       this.$store.dispatch('listoftopics')
       this.$router.push({ name: 'home' })
@@ -133,6 +168,13 @@ export default {
       this.entrypassword = ''
       /* eslint-disable-next-line */
       $('#registerModal').modal('hide')
+    },
+    logoutgoogle () {
+      // immediately signout from google
+      let auth2 = window.gapi.auth2.getAuthInstance()
+      auth2.signOut().then(function () {
+        console.log('User signed out.')
+      })
     },
     logout () {
       this.jwttoken = ''
