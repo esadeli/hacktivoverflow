@@ -43,10 +43,10 @@
                     </div>
                     <div v-if="token === null || token === '' ">
                         <div class="row">
-                        <button>Upvotes</button> : <b>{{ detailobj.upvotes.length }} </b>
+                        <b>Upvotes</b> : <b>{{ detailobj.upvotes.length }} </b>
                         </div>
                         <div class="row">
-                        <button>Downvotes</button> : <b>{{ detailobj.downvotes.length }} </b>
+                        <b>Downvotes</b> : <b>{{ detailobj.downvotes.length }} </b>
                         </div>
                     </div>
                     <hr>
@@ -67,7 +67,25 @@
                           <div class="col-md-2">
                             <span class="badge badge-secondary">{{ answer.answerusername }} </span>
                           </div>
-                          <div class="col-md-7">
+                          <div class="col-md-2">
+                             <div v-if="token !== null && token !== ''">
+                                <div class="row">
+                                  <button v-on:click="upvoteanswer(answer._id)">Upvotes</button> : <b>{{ answer.upvotesanswer.length }} </b>
+                                </div>
+                                <div class="row">
+                                  <button v-on:click="downvoteanswer(answer._id)">Downvotes</button> : <b>{{ answer.downvotesanswer.length }} </b>
+                                </div>
+                             </div>
+                             <div v-if="token === null || token === ''">
+                                 <div class="row">
+                                  <b>Upvotes</b> : <b>{{ answer.upvotesanswer.length }} </b>
+                                </div>
+                                <div class="row">
+                                  <b>Downvotes</b> : <b>{{ answer.downvotesanswer.length }} </b>
+                                </div>
+                             </div>
+                          </div>
+                          <div class="col-md-5">
                             <p>{{ answer.content }}</p>
                           </div>
                           <div class="col-md-1">
@@ -186,6 +204,42 @@ export default {
         })
         .catch(error => {
           console.log('ERROR Add Answer ', error)
+        })
+    },
+    upvoteanswer (input) {
+      let self = this
+      axios({
+        method: 'POST',
+        url: `${self.url}/answers/upvotes/${input}`,
+        headers: {
+          token: self.token
+        }
+      })
+        .then(topic => {
+          this.$store.dispatch('listoftopics')
+          this.$store.dispatch('getdetailobj', self.id)
+          this.$router.push({ path: `/topic/${self.id}` })
+        })
+        .catch(error => {
+          console.log('ERROR Upvotes answer ', error)
+        })
+    },
+    downvoteanswer (input) {
+      let self = this
+      axios({
+        method: 'POST',
+        url: `${self.url}/answers/downvotes/${input}`,
+        headers: {
+          token: self.token
+        }
+      })
+        .then(topic => {
+          this.$store.dispatch('listoftopics')
+          this.$store.dispatch('getdetailobj', self.id)
+          this.$router.push({ path: `/topic/${self.id}` })
+        })
+        .catch(error => {
+          console.log('ERROR Downvotes answer ', error)
         })
     }
   },
