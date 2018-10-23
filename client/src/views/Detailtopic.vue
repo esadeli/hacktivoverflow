@@ -165,6 +165,28 @@ export default {
         .catch(error => {
           console.log('ERROR Upvotes topic ', error)
         })
+    },
+    addanswer () {
+      let self = this
+      axios({
+        method: 'POST',
+        url: `${self.url}/answers`,
+        headers: {
+          token: self.token
+        },
+        data: {
+          content: self.newanswer,
+          topicid: self.id
+        }
+      })
+        .then(answer => {
+          this.$store.dispatch('listoftopics')
+          this.$store.dispatch('getdetailobj', self.id)
+          this.$router.push({ path: `/topic/${self.id}` })
+        })
+        .catch(error => {
+          console.log('ERROR Add Answer ', error)
+        })
     }
   },
   created () {
