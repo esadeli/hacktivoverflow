@@ -2,6 +2,7 @@
 
 const Topic = require('../models/topic')
 const User = require('../models/user')
+const Answer = require('../models/answer')
 
 class TopicController {
     // create topic
@@ -74,26 +75,39 @@ class TopicController {
         })
           .then(topic => {
             let deletedTopic = topic
-            // update user
-            User.findOneAndUpdate({ _id: req.decoded.userid},
-                {
-                    $pull: {
-                        topics: deletedTopic._id
-                    }
-                })
-                .then(user => {
-                    // update user data success
-                    res.status(201).json({
-                        msg: 'Topic has been deleted',
-                        data: deletedTopic
-                    })
-                })
-                .catch(error => {
-                    res.status(500).json({
-                        msg: 'ERROR Update User after delete',
-                        err: error
-                    })
-                })
+
+            // delete all the comments related to this topic
+            Answer.deleteMany({
+                topicid: deletedTopic._id
+            })
+              .then(answer => {
+                    // update user
+                    User.findOneAndUpdate({ _id: req.decoded.userid},
+                        {
+                            $pull: {
+                                topics: deletedTopic._id
+                            }
+                        })
+                        .then(user => {
+                            // update user data success
+                            res.status(201).json({
+                                msg: 'Topic has been deleted',
+                                data: deletedTopic
+                            })
+                        })
+                        .catch(error => {
+                            res.status(500).json({
+                                msg: 'ERROR Update User after delete',
+                                err: error
+                            })
+                        })
+              })
+              .catch(error =>{
+                  res.status(500).json({
+                      msg: 'ERROR Delete Answer related to article',
+                      err: error
+                  })
+              })
           })
           .catch(error => {
               res.status(500).json({
