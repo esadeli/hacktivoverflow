@@ -3,6 +3,7 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const emailValidator = require('../helpers/emailValidator')
+const hashPassword = require('../helpers/hashPassword')
 
 class UserController{
     // register user
@@ -51,9 +52,11 @@ class UserController{
 
     // login user
     static loginUser(req,res) {
+        let hash = hashPassword(req.body.password)
         if(emailValidator(req.body.logininput)){
             User.findOne({
-                email: req.body.logininput 
+                email: req.body.logininput,
+                password: hash
             })
               .then(user => {
                   // get the token
@@ -84,7 +87,8 @@ class UserController{
               })
         } else if(!emailValidator(req.body.logininput)){
             User.findOne({
-                username: req.body.logininput
+                username: req.body.logininput,
+                password: hash
             })
               .then(user => {
                   if(user){

@@ -120,6 +120,8 @@ class TopicController {
     // get list of topics
     static getListOfTopic(req,res){
         Topic.find({})
+        .populate('author')
+        .populate('listanswers') 
           .then(topics => {
               res.status(200).json({
                   msg: 'List of topics',
@@ -156,6 +158,8 @@ class TopicController {
     // get list of topics
     static searchTopicByTitle(req,res){
         Topic.find({})
+         .populate('author')
+         .populate('listanswers')
           .then(topics => {
               let sortedArr = []
               let regex = new RegExp(`${req.body.keyword}`,'i')
