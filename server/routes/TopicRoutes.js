@@ -8,6 +8,7 @@ const isLogin = require('../middlewares/isLogin')
 
 router.post('/', isLogin,TopicController.createTopic)
 router.get('/lists', TopicController.getListOfTopic)
+router.post('/search', TopicController.searchTopicByTitle)
 router.post('/upvotes/:id', isLogin, TopicController.upVotes )
 router.post('/downvotes/:id', isLogin, TopicController.downVotes )
 router.post('/shares/:id', isLogin, TopicController.share)

@@ -151,6 +151,32 @@ class TopicController {
           })
     }
 
+    // get list of topics
+    static searchTopicByTitle(req,res){
+        Topic.find({})
+          .then(topics => {
+              let sortedArr = []
+              let regex = new RegExp(`${req.body.keyword}`,'i')
+              
+              topics.forEach(topic => {
+                  if(regex.test(topic.title)){
+                      sortedArr.push(topic)
+                  }
+              });  
+
+              res.status(200).json({
+                  msg: 'List of topics by keyword',
+                  data: sortedArr
+              })
+          })
+          .catch(error => {
+              res.status(500).json({
+                  msg: 'ERROR Get list of topics ',
+                  err: error
+              })
+          })
+    }
+
     // upvotes topic
     static upVotes(req,res){
         Topic.findOne({
