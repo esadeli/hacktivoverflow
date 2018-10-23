@@ -5,6 +5,7 @@ import Topic from './views/Topic.vue'
 import Alltopics from './views/Alltopics.vue'
 import Detailtopic from './views/Detailtopic.vue'
 import Addtopic from './views/Addtopic.vue'
+import Edittopic from './views/Edittopic.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -43,6 +44,12 @@ export default new Router({
         path: ':id',
         name: 'id',
         component: Detailtopic,
+        props: true
+      },
+      {
+        path: 'edit/:id',
+        name: 'Edittopic',
+        component: Edittopic,
         props: true
       }]
     }

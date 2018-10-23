@@ -22,7 +22,7 @@
                       </div>
                     </div>
                     <div v-if="token !== null && token !== '' && detailobj.author._id === userbasicinfo.userid">
-                        <router-link :to="{name: 'editarticle', params: {id: id }}">
+                        <router-link :to="{name: 'Edittopic', params: {id: detailobj._id }}">
                           <button type="button" class="btn btn-warning">
                           Edit</button>
                         </router-link>

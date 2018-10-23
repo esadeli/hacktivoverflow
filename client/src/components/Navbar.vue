@@ -131,10 +131,10 @@ export default {
       $('#registerModal').modal('hide')
     },
     logout () {
-      // this.$router.push({ name: 'home' })
       this.jwttoken = ''
       localStorage.removeItem('token')
       this.$store.dispatch('logoutobj')
+      this.$router.push({ name: 'home' })
     }
   },
   created () {
@@ -146,7 +146,7 @@ export default {
   },
   computed: {
     token () {
-      this.jwttoken = localStorage.getItem('token')
+      // this.jwttoken = localStorage.getItem('token')
       return this.$store.state.token
     },
     userbasicinfo () {
