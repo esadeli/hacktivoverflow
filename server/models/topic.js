@@ -27,6 +27,10 @@ const TopicSchema = new Schema ({
     shares: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
+    }],
+    listanswers: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Answer'
     }]
 },{
     timestamps: true

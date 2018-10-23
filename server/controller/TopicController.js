@@ -190,7 +190,7 @@ class TopicController {
                 }
             } else if(topic.author == req.decoded.userid) {
                 res.status(400).json({
-                    msg: 'User can\'t upvote her/his own article '
+                    msg: 'User can\'t upvote her/his own topic '
                 })
             }   
          })
@@ -255,7 +255,7 @@ class TopicController {
                 }
             } else if(topic.author == req.decoded.userid) {
                 res.status(400).json({
-                    msg: 'User can\'t downvote her/his own article '
+                    msg: 'User can\'t downvote her/his own topic '
                 })
             }   
          })
