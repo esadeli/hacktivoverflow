@@ -20,7 +20,11 @@ const UserSchema = new Schema({
     },
     thirdpartylogin: {
         type: String
-    }
+    },
+    topics: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Topic'
+    }]
 },{
     timestamps: true
 })

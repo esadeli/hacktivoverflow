@@ -1,6 +1,7 @@
 'use strict'
 
 const Topic = require('../models/topic')
+const User = require('../models/user')
 
 class TopicController {
     // create topic
@@ -11,10 +12,28 @@ class TopicController {
             author: req.decoded.userid
         })
           .then(topic =>{
-            res.status(201).json({
-                msg: 'Topic has been created',
-                data: topic
-            })
+            
+            let newTopic = topic
+            // update user
+            User.findOneAndUpdate({ _id: req.decoded.userid},
+                {
+                    $push: {
+                        topics: newTopic._id
+                    }
+                })
+                .then(user => {
+                    // update user data success
+                    res.status(201).json({
+                        msg: 'Topic has been created',
+                        data: newTopic
+                    })
+                })
+                .catch(error => {
+                    res.status(500).json({
+                        msg: 'ERROR Update User after create',
+                        err: error
+                    })
+                })
           })
           .catch(error => {
               res.status(500).json({
@@ -54,10 +73,27 @@ class TopicController {
             _id: req.params.id
         })
           .then(topic => {
-            res.status(201).json({
-                msg: 'Topic has been deleted',
-                data: topic
-            })
+            let deletedTopic = topic
+            // update user
+            User.findOneAndUpdate({ _id: req.decoded.userid},
+                {
+                    $pull: {
+                        topics: deletedTopic._id
+                    }
+                })
+                .then(user => {
+                    // update user data success
+                    res.status(201).json({
+                        msg: 'Topic has been deleted',
+                        data: deletedTopic
+                    })
+                })
+                .catch(error => {
+                    res.status(500).json({
+                        msg: 'ERROR Update User after delete',
+                        err: error
+                    })
+                })
           })
           .catch(error => {
               res.status(500).json({
@@ -99,6 +135,76 @@ class TopicController {
                 err: error
             })
           })
+    }
+
+    // upvotes topic
+    static upVotes(req,res){
+        Topic.findOne({
+            _id: req.params.id
+        })
+         .then(topic => {
+            let upvotedtopic = topic
+            // check if it's her/his own article
+            if(topic.author != req.decoded.userid) {
+                // check if the user has already upvote this
+                if(topic.upvotes.indexOf(`${req.decoded.userid}`)=== -1){
+                    Topic.findOneAndUpdate({
+                        _id: req.params.id
+                    },{
+                        $push: {
+                          upvotes: req.decoded.userid  
+                        }
+                    })
+                      .then(topic =>{
+                          res.status(201).json({
+                              msg: 'Topic has been upvoted',
+                              data: upvotedtopic
+                          })
+                      })
+                      .catch(error => {
+                          res.status(201).json({
+                              msg: 'ERROR Upvotes topic',
+                              err: error
+                          })
+                      })
+                } else if (topic.upvotes.indexOf(`${req.decoded.userid}`) !== -1) {
+                    Topic.findOneAndUpdate({
+                        _id: req.params.id
+                    },{
+                        $pull: {
+                          upvotes: req.decoded.userid  
+                        }
+                    })
+                      .then(topic =>{
+                          res.status(201).json({
+                              msg: 'Upvotes has been cancelled',
+                              data: upvotedtopic
+                          })
+                      })
+                      .catch(error => {
+                          res.status(201).json({
+                              msg: 'ERROR Cancel Upvotes topic',
+                              err: error
+                          })
+                      })
+                }
+            } else if(topic.author == req.decoded.userid) {
+                res.status(400).json({
+                    msg: 'User can\'t upvotes her/his own article '
+                })
+            }   
+         })
+         .catch(error =>{
+             res.status(500).json({
+                msg: 'ERROR Getting Data before Upvotes',
+                err: error 
+             })
+         })
+    }
+
+    // downvotes topic
+    static downVotes(req,res){
+        
     }
 }
 
