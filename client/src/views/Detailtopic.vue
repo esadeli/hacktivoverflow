@@ -2,7 +2,7 @@
     <div>
         <h1>Topic Detail</h1>
         <div>
-            <div style="width: 52rem;" class="card">
+            <div style="width: 42rem;" class="card">
                 <div class="card-body">
                     <button type="button" class="btn btn-primary">{{ detailobj.title }}</button>
                     <br>
@@ -62,40 +62,46 @@
                     <p class="card-text"><b>Answers: </b></p>
                     <hr>
                     <div v-if="detailobj.listanswers.length !== 0">
-                      <div class="row"
-                        v-for="(answer,index) in detailobj.listanswers" :key="index">
-                          <div class="col-md-2">
-                            <span class="badge badge-secondary">{{ answer.answerusername }} </span>
-                          </div>
-                          <div class="col-md-2">
-                             <div v-if="token !== null && token !== ''">
-                                <div class="row">
-                                  <button v-on:click="upvoteanswer(answer._id)">Upvotes</button> : <b>{{ answer.upvotesanswer.length }} </b>
+                      <div v-for="(answer,index) in detailobj.listanswers" :key="index">
+                          <div class="row" v-if="editanswerid !== answer._id">
+                               <div class="col-md-2">
+                                    <span class="badge badge-secondary">{{ answer.answerusername }} </span>
                                 </div>
-                                <div class="row">
-                                  <button v-on:click="downvoteanswer(answer._id)">Downvotes</button> : <b>{{ answer.downvotesanswer.length }} </b>
+                                <div class="col-md-2">
+                                    <div v-if="token !== null && token !== ''">
+                                        <div class="row">
+                                        <button v-on:click="upvoteanswer(answer._id)">Upvotes</button> : <b>{{ answer.upvotesanswer.length }} </b>
+                                        </div>
+                                        <div class="row">
+                                        <button v-on:click="downvoteanswer(answer._id)">Downvotes</button> : <b>{{ answer.downvotesanswer.length }} </b>
+                                        </div>
+                                    </div>
+                                    <div v-if="token === null || token === ''">
+                                        <div class="row">
+                                        <b>Upvotes</b> : <b>{{ answer.upvotesanswer.length }} </b>
+                                        </div>
+                                        <div class="row">
+                                        <b>Downvotes</b> : <b>{{ answer.downvotesanswer.length }} </b>
+                                        </div>
+                                    </div>
                                 </div>
-                             </div>
-                             <div v-if="token === null || token === ''">
-                                 <div class="row">
-                                  <b>Upvotes</b> : <b>{{ answer.upvotesanswer.length }} </b>
+                                <div class="col-md-5">
+                                    <div><p>{{ answer.content }}</p></div>
                                 </div>
-                                <div class="row">
-                                  <b>Downvotes</b> : <b>{{ answer.downvotesanswer.length }} </b>
+                                <div class="col-md-1">
+                                    <div v-if= "answer.answeruserid == userbasicinfo.userid && token !== '' && token !== null">
+                                    <span type="button" class="btn btn-warning" v-on:click="editanswerform(answer._id, answer.content)">Edit</span>
+                                    <span type="button" class="btn btn-danger" v-on:click="deleteanswer(answer._id)">Delete</span>
+                                    </div>
                                 </div>
-                             </div>
+                                <br>
+                                <br>
+                                <hr>
                           </div>
-                          <div class="col-md-5">
-                            <p>{{ answer.content }}</p>
+                          <div class=row v-if="editanswerid === answer._id">
+                              <input type="text" class="form-control" aria-describedby="emailHelp" v-model= "updateanswer" placeholder="Answer">
+                              <span type="button" class="btn btn-warning" v-on:click="editanswer()">Edit</span>
                           </div>
-                          <div class="col-md-1">
-                             <div v-if= "answer.answeruserid == userbasicinfo.userid && token !== '' && token !== null">
-                              <span type="button" class="btn btn-danger" v-on:click= "deleteanswer(answer._id)">Delete</span>
-                            </div>
-                          </div>
-                          <br>
-                          <br>
-                          <hr>
                       </div>
                     </div>
                     <div v-else>
@@ -127,6 +133,8 @@ export default {
   data () {
     return {
       newanswer: '',
+      updateanswer: '',
+      editanswerid: '',
       url: 'http://localhost:3010'
     }
   },
@@ -204,6 +212,52 @@ export default {
         })
         .catch(error => {
           console.log('ERROR Add Answer ', error)
+        })
+    },
+    editanswerform (id, answer) {
+      this.editanswerid = id
+      this.updateanswer = answer
+      console.log('edit answer id ', this.editanswerid)
+    },
+    editanswer () {
+      let self = this
+      axios({
+        method: 'PUT',
+        url: `${self.url}/answers/${self.editanswerid}`,
+        headers: {
+          token: self.token
+        },
+        data: {
+          content: self.updateanswer
+        }
+      })
+        .then(answer => {
+          self.editanswerid = ''
+          self.updateanswer = ''
+          this.$store.dispatch('listoftopics')
+          this.$store.dispatch('getdetailobj', self.id)
+          this.$router.push({ path: `/topic/${self.id}` })
+        })
+        .catch(error => {
+          console.log('ERROR Edit Answer ', error)
+        })
+    },
+    deleteanswer (input) {
+      let self = this
+      axios({
+        method: 'DELETE',
+        url: `${self.url}/answers/${input}`,
+        headers: {
+          token: self.token
+        }
+      })
+        .then(answer => {
+          this.$store.dispatch('listoftopics')
+          this.$store.dispatch('getdetailobj', self.id)
+          this.$router.push({ path: `/topic/${self.id}` })
+        })
+        .catch(error => {
+          console.log('ERROR Edit Answer ', error)
         })
     },
     upvoteanswer (input) {
