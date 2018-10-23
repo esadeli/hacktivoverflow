@@ -136,7 +136,7 @@ class TopicController {
 
     // get detail topic
     static getDetail(req,res){
-        Topic.findOne({ _id: req.params.id })
+        Topic.findOne({ _id: req.params.id }).populate('author')
           .then(topic => {
             res.status(200).json({
                 msg: `Detail of topic ${topic.title}`,
