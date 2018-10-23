@@ -51,9 +51,9 @@ class UserController{
 
     // login user
     static loginUser(req,res) {
-        if(emailValidator(req.body.email)){
+        if(emailValidator(req.body.logininput)){
             User.findOne({
-                email: req.body.email 
+                email: req.body.logininput 
             })
               .then(user => {
                   // get the token
@@ -70,7 +70,7 @@ class UserController{
                          })
                     } else {
                         res.status(500).json({
-                            msg: 'ERROR Token when register user ',
+                            msg: 'ERROR Token when login user ',
                             err: err
                         })
                     }
@@ -78,14 +78,47 @@ class UserController{
               })
               .catch(error => {
                   res.status(500).json({
-                      msg: 'ERROR Login User',
+                      msg: 'ERROR Login User Email',
                       err: error
                   })
               })
-        } else {
-            res.status(400).json({
-                msg: 'Please Check your email'
+        } else if(!emailValidator(req.body.logininput)){
+            User.findOne({
+                username: req.body.logininput
             })
+              .then(user => {
+                  if(user){
+                      // get the token
+                    jwt.sign({
+                        userid: user._id,
+                        name: user.name,
+                        username: user.username,
+                        email: user.email
+                    },process.env.SECRETTOKEN, (err, token) => {
+                        if(!err) {
+                            res.status(201).json({
+                                msg: 'Login successful',
+                                token: token
+                                })
+                        } else {
+                            res.status(500).json({
+                                msg: 'ERROR Token when login user ',
+                                err: err
+                            })
+                        }
+                    })
+                  } else {
+                    res.status(400).json({
+                        msg: 'Please Check your email, username, or password'
+                    })
+                  }
+              })
+              .catch(error => {
+                  res.status(500).json({
+                      msg: 'ERROR Login User Username',
+                      err: error
+                  })
+              })
         }
     }
 
