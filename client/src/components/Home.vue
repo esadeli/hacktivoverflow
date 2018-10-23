@@ -4,8 +4,15 @@
             <div class="col-md-2">
                <Sidebar></Sidebar>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-7">
                <router-view></router-view>
+            </div>
+            <div class="col-md-3">
+               <br>
+               <br>
+               <br>
+               <br>
+               <p>Chatting Session</p>
             </div>
         </div>
     </div>

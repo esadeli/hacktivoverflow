@@ -21,6 +21,7 @@
                         <i class="fa fa-google-plus"></i></a>
                       </div>
                     </div>
+                    <hr>
                     <div v-if="token !== null && token !== '' && detailobj.author._id === userbasicinfo.userid">
                         <router-link :to="{name: 'Edittopic', params: {id: detailobj._id }}">
                           <button type="button" class="btn btn-warning">
@@ -31,6 +32,23 @@
                           Delete</button>
                     </div>
                     <br>
+                    <hr>
+                    <div v-if="token !== null && token !== '' ">
+                        <div class="row">
+                        <button v-on:click="upvotetopic()">Upvotes</button> : <b>{{ detailobj.upvotes.length }} </b>
+                        </div>
+                        <div class="row">
+                        <button v-on:click="downvotetopic()">Downvotes</button> : <b>{{ detailobj.downvotes.length }} </b>
+                        </div>
+                    </div>
+                    <div v-if="token === null || token === '' ">
+                        <div class="row">
+                        <button>Upvotes</button> : <b>{{ detailobj.upvotes.length }} </b>
+                        </div>
+                        <div class="row">
+                        <button>Downvotes</button> : <b>{{ detailobj.downvotes.length }} </b>
+                        </div>
+                    </div>
                     <hr>
                     <br>
                     <p class="card-text">Author: {{ detailobj.author.name }}</p>
@@ -84,12 +102,69 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'Detailtopic',
   props: ['id'],
   data () {
     return {
-      newanswer: ''
+      newanswer: '',
+      url: 'http://localhost:3010'
+    }
+  },
+  methods: {
+    deletetopic () {
+      let self = this
+      axios({
+        method: 'DELETE',
+        url: `${self.url}/topics/${self.id}`,
+        headers: {
+          token: self.token
+        }
+      })
+        .then(topic => {
+          this.$store.dispatch('listoftopics')
+          this.$router.push({ name: 'home' })
+        })
+        .catch(error => {
+          console.log('ERROR Delete Topic ', error)
+        })
+    },
+    upvotetopic () {
+      let self = this
+      axios({
+        method: 'POST',
+        url: `${self.url}/topics/upvotes/${self.id}`,
+        headers: {
+          token: self.token
+        }
+      })
+        .then(topic => {
+          this.$store.dispatch('listoftopics')
+          this.$store.dispatch('getdetailobj', self.id)
+          this.$router.push({ path: `/topic/${self.id}` })
+        })
+        .catch(error => {
+          console.log('ERROR Upvotes topic ', error)
+        })
+    },
+    downvotetopic () {
+      let self = this
+      axios({
+        method: 'POST',
+        url: `${self.url}/topics/downvotes/${self.id}`,
+        headers: {
+          token: self.token
+        }
+      })
+        .then(topic => {
+          this.$store.dispatch('listoftopics')
+          this.$store.dispatch('getdetailobj', self.id)
+          this.$router.push({ path: `/topic/${self.id}` })
+        })
+        .catch(error => {
+          console.log('ERROR Upvotes topic ', error)
+        })
     }
   },
   created () {

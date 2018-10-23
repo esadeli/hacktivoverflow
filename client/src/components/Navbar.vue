@@ -1,7 +1,7 @@
 <template>
     <div>
        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand" href="#">Forum Basa Basi</a>
+        <button class="btn btn-secondary" v-on:click="gotohome()">Forum Basa Basi</button>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -104,6 +104,10 @@ export default {
     }
   },
   methods: {
+    gotohome () {
+      this.$store.dispatch('listoftopics')
+      this.$router.push({ name: 'home' })
+    },
     loginUser () {
       let loginObj = {
         logininput: this.entrylogin,
