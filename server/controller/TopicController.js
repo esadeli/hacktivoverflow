@@ -3,6 +3,8 @@
 const Topic = require('../models/topic')
 const User = require('../models/user')
 const Answer = require('../models/answer')
+const kue = require('kue')
+const queue = kue.createQueue()
 
 class TopicController {
     // create topic
@@ -23,6 +25,33 @@ class TopicController {
                     }
                 })
                 .then(user => {
+                    const job = queue.create('email', {
+                        title: `Update email for ${req.decoded.name}`,
+                        to: `${req.decoded.email}`,
+                        subject: `Update ${req.decoded.name} di Forum Basa Basi`,
+                        text: 'OK',
+                        html: 
+                        `
+                        <h2>
+                            Hi ${req.decoded.name} terima kasih untuk topik kamu yang berjudul ${newTopic.title}
+                        </h2>
+                        <p>
+                            Kami berharap kamu dapat terus aktif berbagi pengalaman dan pesan di Forum Basa Basi
+                        </p>
+                        <hr>
+                        <p>
+                        Kalau ada kesulitan dalam memakai Forum Basa Basi coba email ecosmetics.wonder@gmail.com
+                        </p>
+                        <p>
+                        Salam hangat,  
+                        </p>
+                        <p> Agan Forum Basa Basi </p>`
+                    }).save(function (err) {
+                        if(!err){
+                           console.log(job.id)  
+                        }
+                    })
+
                     // update user data success
                     res.status(201).json({
                         msg: 'Topic has been created',

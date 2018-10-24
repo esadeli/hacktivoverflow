@@ -2,6 +2,7 @@
 require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
+const kue = require('kue') // for UI purposes
 const cors = require('cors')
 const IndexRoutes = require('./routes/IndexRoutes')
 const UserRoutes = require('./routes/UserRoutes')
@@ -19,6 +20,7 @@ app.use('/topics', TopicRoutes)
 app.use('/answers', AnswerRoutes)
 
 app.get('/', (req,res)=>{ res.send('OK')})
+kue.app.listen(3000) // for UI purposes
 app.listen(process.env.PORT || 3000, () =>{
     console.log('Listening to port ',process.env.PORT)
 })

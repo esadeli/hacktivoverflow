@@ -37,7 +37,6 @@ export default {
   methods: {
     addchat () {
       let self = this
-      console.log('username-----', self.userbasicinfo.name)
       db.ref('/chat/').push({
         name: self.userbasicinfo.name,
         chat: self.newchat
