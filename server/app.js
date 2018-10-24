@@ -9,7 +9,7 @@ const UserRoutes = require('./routes/UserRoutes')
 const TopicRoutes = require('./routes/TopicRoutes')
 const AnswerRoutes = require('./routes/AnswerRoutes')
 mongoose.connect('mongodb://localhost:27017/hacktivoverflowdb', {useNewUrlParser: true})
-
+// mongoose.connect(process.env.MONGO_USER, {useNewUrlParser: true})
 const app = express()
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
