@@ -48,6 +48,14 @@ export default {
       })
     }
   },
+  computed: {
+    token () {
+      return this.$store.state.token
+    },
+    userbasicinfo () {
+      return this.$store.state.userbasicinfo
+    }
+  },
   watch: {
     allchats (val) {}
   }

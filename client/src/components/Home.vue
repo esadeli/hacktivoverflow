@@ -12,8 +12,11 @@
                <br>
                <br>
                <br>
-               <div>
+               <div v-if="token !== null && token !== ''">
                  <Chat></Chat>
+               </div>
+               <div v-if="token === null || token === ''">
+                  <p>Chat session will be available after you register / login</p>
                </div>
             </div>
         </div>
@@ -28,6 +31,11 @@ export default {
   name: 'Home',
   components: {
     Sidebar, Topic, Chat
+  },
+  computed: {
+    token () {
+      return this.$store.state.token
+    }
   }
 }
 </script>
