@@ -4,7 +4,7 @@ const CronJob = require('cron').CronJob
 const nodemailer = require('nodemailer')
 const kue = require('kue')
 const queue = kue.createQueue()
-new CronJob('5 * * * * *', function (){
+new CronJob('* * * * 6', function (){ // use 5 * * * * * for testing
     // console.log('MASUKK-----')
     // should send maximum 20 emails at a time but change back to single email
     // queue.process('email',20, function (job, done) //
