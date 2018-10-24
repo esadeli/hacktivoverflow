@@ -30,7 +30,7 @@ export default {
     return {
       detailtopictitle: '',
       detailtopicdescription: '',
-      url: 'https://hacktivoverflow23api.efratsadeli.tech/'
+      url: 'https://hacktivoverflow23api.efratsadeli.tech'
     }
   },
   methods: {
