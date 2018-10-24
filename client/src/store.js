@@ -33,7 +33,7 @@ export default new Vuex.Store({
     loginobj (context, payload) {
       axios({
         method: 'POST',
-        url: 'http://localhost:3010/user/login',
+        url: 'https://hacktivoverflow23api.efratsadeli.tech/user/login',
         data: payload
       })
         .then(user => {
@@ -45,7 +45,7 @@ export default new Vuex.Store({
           // get user basic info
           axios({
             method: 'GET',
-            url: 'http://localhost:3010/users/getbasicinfo',
+            url: 'https://hacktivoverflow23api.efratsadeli.tech/users/getbasicinfo',
             headers: {
               token: token
             }
@@ -66,7 +66,7 @@ export default new Vuex.Store({
     registerobj (context, payload) {
       axios({
         method: 'POST',
-        url: 'http://localhost:3010/user/register',
+        url: 'https://hacktivoverflow23api.efratsadeli.tech/user/register',
         data: payload
       })
         .then(user => {
@@ -77,7 +77,7 @@ export default new Vuex.Store({
 
           axios({
             method: 'GET',
-            url: 'http://localhost:3010/users/getbasicinfo',
+            url: 'https://hacktivoverflow23api.efratsadeli.tech/users/getbasicinfo',
             headers: {
               token: token
             }
@@ -98,7 +98,7 @@ export default new Vuex.Store({
     logingoogle (context, payload) {
       axios({
         method: 'POST',
-        url: 'http://localhost:3010/user/logingoogle',
+        url: 'https://hacktivoverflow23api.efratsadeli.tech/user/logingoogle',
         data: {
           googletoken: payload
         }
@@ -110,7 +110,7 @@ export default new Vuex.Store({
           context.commit('geterror', '')
           axios({
             method: 'GET',
-            url: 'http://localhost:3010/users/getbasicinfo',
+            url: 'https://hacktivoverflow23api.efratsadeli.tech/users/getbasicinfo',
             headers: {
               token: token
             }
@@ -136,7 +136,7 @@ export default new Vuex.Store({
     listoftopics (context, payload) {
       axios({
         method: 'GET',
-        url: 'http://localhost:3010/topics/lists'
+        url: 'https://hacktivoverflow23api.efratsadeli.tech/topics/lists'
       })
         .then(topics => {
           context.commit('getlistoftopics', topics.data.data)
@@ -148,7 +148,7 @@ export default new Vuex.Store({
     searchtopic (context, payload) {
       axios({
         method: 'POST',
-        url: 'http://localhost:3010/topics/search',
+        url: 'https://hacktivoverflow23api.efratsadeli.tech/topics/search',
         data: {
           keyword: payload
         }
@@ -163,7 +163,7 @@ export default new Vuex.Store({
     getdetailobj (context, payload) {
       axios({
         method: 'GET',
-        url: `http://localhost:3010/topics/${payload}`
+        url: `https://hacktivoverflow23api.efratsadeli.tech/topics/${payload}`
       })
         .then(topic => {
           context.commit('getdetailobj', topic.data.data)

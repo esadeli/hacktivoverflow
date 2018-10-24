@@ -14,6 +14,9 @@
     <link rel="me" href="https://twitter.com/twitterdev">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
 integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <!--
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.34.min.js"></script> 
+    -->
     <title>Forum Basa Basi</title>
   </head>
   <body>
@@ -21,6 +24,23 @@ integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQV
       <strong>We're sorry but client doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
+    <!--
+    <script>
+      var ec2 = new AWS.EC2({region: 'us-west-2'});
+
+      ec2.describeInstances(function(err, data) {
+        if (err) {
+          console.log(err);
+        } else {
+          data.Reservations.forEach(function(reservation) {
+            reservation.Instances.forEach(function(instance) {
+              console.log(instance.InstanceId);
+            });
+          });
+        }
+      });
+    </script>
+    -->
     <!-- Bootstrap dependencies -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

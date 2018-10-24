@@ -27,7 +27,8 @@ export default {
   data () {
     return {
       topictitle: '',
-      topicdescription: ''
+      topicdescription: '',
+      url: 'https://hacktivoverflow23api.efratsadeli.tech'
     }
   },
   methods: {
@@ -35,7 +36,7 @@ export default {
       let self = this
       axios({
         method: 'POST',
-        url: 'http://localhost:3010/topics',
+        url: `${self.url}/topics`,
         headers: {
           token: this.token
         },
@@ -45,7 +46,6 @@ export default {
         }
       })
         .then(topic => {
-          console.log('topic created-----', topic.data)
           this.$store.dispatch('listoftopics')
           this.$router.push({ name: 'home' })
         })

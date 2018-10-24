@@ -29,7 +29,8 @@ export default {
   data () {
     return {
       detailtopictitle: '',
-      detailtopicdescription: ''
+      detailtopicdescription: '',
+      url: 'https://hacktivoverflow23api.efratsadeli.tech/'
     }
   },
   methods: {
@@ -37,7 +38,7 @@ export default {
       let self = this
       axios({
         method: 'PUT',
-        url: `http://localhost:3010/topics/${self.id}`,
+        url: `${self.url}/topics/${self.id}`,
         headers: {
           token: self.token
         },
@@ -58,7 +59,7 @@ export default {
       let self = this
       axios({
         method: 'GET',
-        url: `http://localhost:3010/topics/${self.id}`
+        url: `${self.url}/topics/${self.id}`
       })
         .then(topic => {
           let detailtopic = topic.data.data

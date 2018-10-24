@@ -135,7 +135,7 @@ export default {
       newanswer: '',
       updateanswer: '',
       editanswerid: '',
-      url: 'http://localhost:3010'
+      url: 'https://hacktivoverflow23api.efratsadeli.tech'
     }
   },
   methods: {
