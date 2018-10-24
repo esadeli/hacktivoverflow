@@ -206,6 +206,7 @@ export default {
         }
       })
         .then(answer => {
+          self.newanswer = ''
           this.$store.dispatch('listoftopics')
           this.$store.dispatch('getdetailobj', self.id)
           this.$router.push({ path: `/topic/${self.id}` })

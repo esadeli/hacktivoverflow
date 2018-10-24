@@ -12,7 +12,9 @@
                <br>
                <br>
                <br>
-               <p>Chatting Session</p>
+               <div>
+                 <Chat></Chat>
+               </div>
             </div>
         </div>
     </div>
@@ -21,10 +23,11 @@
 <script>
 import Sidebar from '@/components/Sidebar.vue'
 import Topic from '@/views/Topic.vue'
+import Chat from '@/components/Chat.vue'
 export default {
   name: 'Home',
   components: {
-    Sidebar, Topic
+    Sidebar, Topic, Chat
   }
 }
 </script>
