@@ -122,7 +122,7 @@ export default {
         // scope: 'additional_scope'
       })
       this.attachSignin(auth2, document.getElementById('google-signin-button'))
-    })  
+    })
   },
   methods: {
     attachSignin (auth2Instance, element) {
@@ -130,15 +130,16 @@ export default {
       auth2Instance.attachClickHandler(element, {},
         function (googleUser) {
           const profile = googleUser.getBasicProfile()
+          /* eslint-disable-next-line */
           const id_token = googleUser.getAuthResponse().id_token;
           console.log('Name: ' + profile.getName())
           console.log('Email: ' + profile.getEmail()) // This is null if the 'email' scope is not present.
-          // self.logingoogle()
-          //self.logoutgoogle()
+          self.logingoogle(id_token)
+          self.logoutgoogle()
         }, function (error) {
           alert(JSON.stringify(error, undefined, 2))
         })
-    },  
+    },
     gotohome () {
       this.$store.dispatch('listoftopics')
       this.$router.push({ name: 'home' })
@@ -168,6 +169,9 @@ export default {
       this.entrypassword = ''
       /* eslint-disable-next-line */
       $('#registerModal').modal('hide')
+    },
+    logingoogle (input) {
+      this.$store.dispatch('logingoogle', input)
     },
     logoutgoogle () {
       // immediately signout from google

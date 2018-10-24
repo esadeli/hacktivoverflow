@@ -95,6 +95,39 @@ export default new Vuex.Store({
           context.commit('geterror', error.response.data)
         })
     },
+    logingoogle (context, payload) {
+      axios({
+        method: 'POST',
+        url: 'http://localhost:3010/user/logingoogle',
+        data: {
+          googletoken: payload
+        }
+      })
+        .then(user => {
+          let token = user.data.token
+          localStorage.setItem('token', user.data.token)
+          context.commit('gettoken', user.data.token)
+          context.commit('geterror', '')
+          axios({
+            method: 'GET',
+            url: 'http://localhost:3010/users/getbasicinfo',
+            headers: {
+              token: token
+            }
+          })
+            .then(info => {
+              context.commit('getuserbasicinfo', info.data.data)
+            })
+            .catch(error => {
+              console.log('ERROR Get User info ', error)
+            })
+        })
+        .catch(error => {
+          console.log('ERROR State Login Google ----', error)
+          context.commit('gettoken', '')
+          context.commit('geterror', error.response.data)
+        })
+    },
     logoutobj (context, payload) {
       context.commit('getuserbasicinfo', '')
       context.commit('gettoken', '')
