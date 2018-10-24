@@ -3,7 +3,16 @@
       <h1>Chat Session</h1>
       <div id="chatroom">
         <ul class="list-group" v-for="(chat,index) in allchats" :key="index">
-          <li class="list-group-item">{{ chat.chat }}</li>
+          <li class="list-group-item">
+              <div class="row">
+                <div class="col-md-4">
+                   <h6><span class="badge badge-secondary">{{ chat.name }}</span></h6>
+                </div>
+                <div class="col-md-8">
+                    {{ chat.chat }}
+                </div>
+              </div>
+          </li>
         </ul>
       </div>
       <br>
@@ -28,7 +37,9 @@ export default {
   methods: {
     addchat () {
       let self = this
+      console.log('username-----', self.userbasicinfo.name)
       db.ref('/chat/').push({
+        name: self.userbasicinfo.name,
         chat: self.newchat
       }, (error) => {
         if (!error) {
