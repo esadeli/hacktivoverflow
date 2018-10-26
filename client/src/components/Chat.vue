@@ -58,6 +58,17 @@ export default {
       })
     }
   },
+  created () {
+    // repopulate data
+    let self = this
+    db.ref('/chat').on('value', function (snapshot) {
+      self.allchats = []
+      snapshot.forEach(detailsnapshot => {
+        self.allchats.push(detailsnapshot.val())
+        console.log(detailsnapshot.val())
+      })
+    })
+  },
   computed: {
     token () {
       return this.$store.state.token

@@ -37,16 +37,10 @@
                         <div class="row">
                         <button v-on:click="upvotetopic()">Upvotes</button> : <b>{{ detailobj.upvotes.length }} </b>
                         </div>
-                        <div class="row">
-                        <button v-on:click="downvotetopic()">Downvotes</button> : <b>{{ detailobj.downvotes.length }} </b>
-                        </div>
                     </div>
                     <div v-if="token === null || token === '' ">
                         <div class="row">
                         <b>Upvotes</b> : <b>{{ detailobj.upvotes.length }} </b>
-                        </div>
-                        <div class="row">
-                        <b>Downvotes</b> : <b>{{ detailobj.downvotes.length }} </b>
                         </div>
                     </div>
                     <hr>
